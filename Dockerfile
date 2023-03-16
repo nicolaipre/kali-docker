@@ -1,14 +1,16 @@
 FROM kalilinux/kali-rolling
 
-#ARG user # TODO: Add user as argument
+#ARG username # TODO: Add username as argument
+#ARG password # TODO: Add password as argument
 
-# Fix Kali fuckup
+# Fix Kali package fetching
 RUN sed -i "s/http.kali.org/kali.download/g" /etc/apt/sources.list
 
 # Install packages
 RUN dpkg --add-architecture i386
 RUN apt update
-#RUN apt install -y kali-linux-headless # kali-linux-large
+RUN apt-mark hold console-setup # Broken package
+RUN apt install -y kali-linux-headless
 RUN apt install -y openssh-server xauth x11-apps libgdk-pixbuf2.0-bin libgtk-3-dev sudo net-tools htop ncdu tree mtr
 
 # Configure sshd (server)
