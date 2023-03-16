@@ -24,24 +24,18 @@ RUN echo "user:user" | chpasswd
 RUN usermod -aG sudo user
 
 WORKDIR /home/user
+USER user
 
 # Set up SSH X11 forwarding for GUI applications
 RUN mkdir -p /home/user/.ssh
-RUN chmod 700 /home/user/.ssh
+ADD id_rsa.pub id_rsa.pub
+RUN cat id_rsa.pub >> /home/user/.ssh/authorized_keys # Perms: 644
+RUN rm id_rsa.pub
 
-ADD id_rsa.pub /tmp/id_rsa.pub
-
-RUN cat /tmp/id_rsa.pub >> /home/user/.ssh/authorized_keys
-RUN rm /tmp/id_rsa.pub
-
-RUN chown -R user:user /home/user
-#RUN chmod -R a+rx /home/user
-
-USER user
-
+# Silence Kali notifications
 RUN touch ~/.Xauthority
 RUN touch ~/.hushlogin
 
 # Try to avoid this dirty hack. Find a way to start sshd
 #CMD ["/usr/sbin/sshd", "-D"]
-ENTRYPOINT ["sh", "-c", "/usr/sbin/sshd", "-D", "&&", "tail", "-f", "/dev/null"]
+#ENTRYPOINT ["sh", "-c", "/usr/sbin/sshd", "-D", "&&", "tail", "-f", "/dev/null"]
