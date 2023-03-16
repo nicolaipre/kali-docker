@@ -41,5 +41,7 @@ USER user
 
 RUN touch ~/.Xauthority
 RUN touch ~/.hushlogin
+
+# Try to avoid this dirty hack. Find a way to start sshd
 #CMD ["/usr/sbin/sshd", "-D"]
 ENTRYPOINT ["sh", "-c", "/usr/sbin/sshd", "-D", "&&", "tail", "-f", "/dev/null"]
