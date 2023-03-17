@@ -5,7 +5,7 @@ build:
 	docker build -t kali .
 
 run:
-	docker run -it -d --net host --name kali -e DISPLAY=${DISPLAY} -v $(pwd)/shared:/shared -p 31337:22 kali # --rm
+	docker run -it -d --net host --name kali -e DISPLAY=${DISPLAY} -v $(pwd)/shared:/shared # --rm
 
 shell:
 	docker exec -it kali /bin/bash
